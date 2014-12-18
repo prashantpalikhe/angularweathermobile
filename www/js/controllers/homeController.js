@@ -1,5 +1,5 @@
 angular.module('weather')
-    .controller('HomeCtrl', function ($scope, $rootScope, $stateParams, Bookmarks, Weather) {
+    .controller('HomeCtrl', function ($scope, $rootScope, $routeParams, $ionicLoading, Bookmarks, Weather, Flickr) {
         'use strict';
 
         $scope.config = {
@@ -8,6 +8,7 @@ angular.module('weather')
 
         $scope.coords = "";
         $scope.data = {};
+        $scope.cities = Bookmarks.getCities();
 
         $scope.setData = function (data) {
             $scope.resetData();
@@ -15,11 +16,20 @@ angular.module('weather')
             var today = data[0];
             var forecasts = data[1];
 
+            $scope.config.city = today.name + ', ' + today.sys.country;
+
             $scope.data.today = today;
             $scope.data.period = (today.dt > today.sys.sunset || today.dt < today.sys.sunrise) ? "night" : "day";
 
             forecasts.list.shift();
             $scope.data.forecasts = forecasts.list;
+
+            Flickr.searchPhoto(today.coord).then(function (response) {
+                var photo = response.data.photos.photo[0];
+                var url = 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+
+                $('.home').backstretch(url, {speed: 400});
+            });
         };
 
         $scope.resetData = function () {
@@ -44,7 +54,11 @@ angular.module('weather')
                 return;
             }
 
-            Weather[by](param, $rootScope.settings.unit).then($scope.setData);
+            $ionicLoading.show();
+
+            Weather[by](param, $rootScope.settings.unit).then($scope.setData).finally(function () {
+                $ionicLoading.hide();
+            });
         };
 
         $scope.addCity = function () {
@@ -58,11 +72,13 @@ angular.module('weather')
         $scope.removeCity = function () {
             if ($scope.config.city) {
                 Bookmarks.removeCity($scope.config.city);
+
+                alert($scope.config.city + ' is removed from your bookmarks.');
             }
         };
 
         $scope.init = function () {
-            $scope.config.city = $stateParams.city || '';
+            $scope.config.city = $routeParams.city || '';
 
             /**
              * If no city provided, display user's local weather.

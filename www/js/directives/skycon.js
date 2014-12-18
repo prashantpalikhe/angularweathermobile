@@ -23,7 +23,7 @@ angular.module('weather')
             "50n" : "fog"
         };
 
-        var skycon = new Skycons({'color': 'black'});
+        var skycon = new Skycons({'color': 'white'});
 
         return {
             restrict: 'A',
