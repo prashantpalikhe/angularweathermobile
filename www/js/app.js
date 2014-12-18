@@ -16,7 +16,7 @@ angular.module('weather', ['ionic', 'ngRoute'])
     .run(function ($rootScope) {
         $rootScope.settings = {
             unit: 'metric',
-            shouldGeoLocate: false
+            shouldGeoLocate: true
         };
     })
 
@@ -30,6 +30,6 @@ angular.module('weather', ['ionic', 'ngRoute'])
         // if none of the above routes are met, use this fallback
         // which executes the 'IntroCtrl' controller (controllers.js)
         $routeProvider.otherwise({
-            redirectTo: '/'
+            redirectTo: '/utrecht'
         });
     });

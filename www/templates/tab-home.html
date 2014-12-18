@@ -4,11 +4,12 @@
             <ion-content class="home">
                 <div class="home-overlay"></div>
 
+                <button class="button button-icon icon ion-navicon" ng-click="toggleLeft()"></button>
+
                 <form ng-submit="fetchData()">
                     <div class="list">
-                        <label class="item item-input item-floating-label">
-                            <span class="input-label">Which city are you in?</span>
-                            <input class="city" type="text" placeholder="Which city are you in?" ng-model="config.city" required autofocus>
+                        <label class="item item-input">
+                            <input class="city" type="text" placeholder="{{ config.city }}" ng-model="config.city" required autofocus>
                         </label>
                     </div>
                 </form>
@@ -61,7 +62,7 @@
     <ion-side-menu side="left">
         <ion-list>
             <ion-item ng-repeat="city in cities">
-                <a ng-click="show(city)">{{ city }}</a>
+                <a ng-href="/#/{{ city }}">{{ city }}</a>
             </ion-item>
         </ion-list>
     </ion-side-menu>

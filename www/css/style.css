@@ -3,6 +3,11 @@
     border-radius: 0;
 }
 
+.city {
+    font-size: 30px;
+    text-align: center;
+}
+
 .item {
     border: none;
     background-color: transparent;

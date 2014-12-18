@@ -1,5 +1,5 @@
 angular.module('weather')
-    .controller('HomeCtrl', function ($scope, $rootScope, $routeParams, $ionicLoading, Bookmarks, Weather, Flickr) {
+    .controller('HomeCtrl', function ($scope, $rootScope, $routeParams, $ionicLoading, $ionicSideMenuDelegate, Bookmarks, Weather, Flickr) {
         'use strict';
 
         $scope.config = {
@@ -9,6 +9,10 @@ angular.module('weather')
         $scope.coords = "";
         $scope.data = {};
         $scope.cities = Bookmarks.getCities();
+
+        $scope.toggleLeft = function() {
+            $ionicSideMenuDelegate.toggleLeft();
+        };
 
         $scope.setData = function (data) {
             $scope.resetData();
@@ -63,7 +67,7 @@ angular.module('weather')
 
         $scope.addCity = function () {
             if ($scope.config.city) {
-                Bookmarks.addCity($scope.config.city);
+                $scope.cities = Bookmarks.addCity($scope.config.city);
 
                 alert($scope.config.city + ' is added to your bookmarks.');
             }
