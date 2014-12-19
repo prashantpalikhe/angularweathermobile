@@ -1,5 +1,5 @@
 angular.module('weather')
-    .controller('HomeCtrl', function ($scope, $rootScope, $routeParams, $ionicLoading, $ionicSideMenuDelegate, Bookmarks, Weather, Flickr) {
+    .controller('HomeCtrl', function ($scope, $rootScope, $location, $routeParams, $ionicLoading, $ionicSideMenuDelegate, Bookmarks, Weather, Flickr) {
         'use strict';
 
         $scope.config = {
@@ -7,7 +7,7 @@ angular.module('weather')
         };
 
         $scope.coords = "";
-        $scope.data = {};
+        $scope.data   = {};
         $scope.cities = Bookmarks.getCities();
 
         $scope.toggleLeft = function() {
@@ -29,7 +29,9 @@ angular.module('weather')
             $scope.data.forecasts = forecasts.list;
 
             Flickr.searchPhoto(today.coord).then(function (response) {
-                var photo = response.data.photos.photo[0];
+                var randomIndex = Math.floor(Math.random() * ((response.data.photos.photo.length - 1) - 0 + 1)) + 0;
+
+                var photo = response.data.photos.photo[randomIndex];
                 var url = 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
 
                 $('.home').backstretch(url, {speed: 400});
@@ -65,20 +67,24 @@ angular.module('weather')
             });
         };
 
-        $scope.addCity = function () {
-            if ($scope.config.city) {
-                $scope.cities = Bookmarks.addCity($scope.config.city);
+        $scope.addCity = function (city) {
+            $scope.cities = Bookmarks.addCity(city);
 
-                alert($scope.config.city + ' is added to your bookmarks.');
-            }
+            alert(city + ' is added to your bookmarks.');
         };
 
-        $scope.removeCity = function () {
-            if ($scope.config.city) {
-                Bookmarks.removeCity($scope.config.city);
+        $scope.removeCity = function (city) {
+            Bookmarks.removeCity(city);
 
-                alert($scope.config.city + ' is removed from your bookmarks.');
-            }
+            alert(city + ' is removed from your bookmarks.');
+        };
+
+        $scope.isBookmarked = function (city) {
+            return Bookmarks.isBookmarked(city);
+        };
+
+        $scope.goto = function (city) {
+            $location.path('/' + city);
         };
 
         $scope.init = function () {

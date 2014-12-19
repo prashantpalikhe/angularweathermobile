@@ -17,6 +17,12 @@ angular.module('weather')
                 return retrieve();
             },
 
+            isBookmarked: function (city) {
+                var cities = retrieve();
+
+                return cities.indexOf(city) !== -1;
+            },
+
             addCity: function (city) {
                 var cities = retrieve();
 
